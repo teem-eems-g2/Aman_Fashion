@@ -7,6 +7,7 @@ import categoryRouter from './routes/category.routes';
 import adminCategoryRouter from './routes/adminCategory.routes';
 import productRouter from './routes/product.routes';
 import adminProductRouter from './routes/adminProduct.routes';
+import cartRouter from './routes/cart.routes';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/admin/categories', adminCategoryRouter);
 app.use('/api/products', productRouter);
 app.use('/api/admin/products', adminProductRouter);
+app.use('/api/cart', cartRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
