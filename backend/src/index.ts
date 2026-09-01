@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRouter from './routes/auth.routes';
+import adminAuthRouter from './routes/adminAuth.routes';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/admin/auth', adminAuthRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
