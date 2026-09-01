@@ -1,12 +1,26 @@
-import { Router, Response } from 'express';
+import { Router, Response, NextFunction } from 'express';
 import { z } from 'zod';
+import multer from 'multer';
 import { prisma } from '../lib/prisma';
+import cloudinary from '../config/cloudinary';
 import { adminAuthMiddleware, AuthenticatedAdminRequest } from '../middleware/adminAuth.middleware';
 
 const router = Router();
 
 // Apply adminAuthMiddleware to all admin product routes
 router.use(adminAuthMiddleware);
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype && file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'));
+    }
+  },
+});
 
 const createProductSchema = z.object({
   name: z.string().min(1, { message: 'Product name is required' }).trim(),
@@ -250,5 +264,65 @@ router.post('/:id/images', async (req: AuthenticatedAdminRequest, res: Response)
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// POST /api/admin/products/:id/upload-image
+router.post(
+  '/:id/upload-image',
+  (req: AuthenticatedAdminRequest, res: Response, next: NextFunction) => {
+    upload.single('image')(req, res, (err: any) => {
+      if (err) {
+        res.status(400).json({ error: err.message || 'File upload error' });
+        return;
+      }
+      next();
+    });
+  },
+  async (req: AuthenticatedAdminRequest, res: Response): Promise<void> => {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+
+    if (!req.file) {
+      res.status(400).json({ error: 'Image file is required' });
+      return;
+    }
+
+    try {
+      const product = await prisma.product.findUnique({
+        where: { id },
+      });
+
+      if (!product) {
+        res.status(404).json({ error: 'Product not found' });
+        return;
+      }
+
+      // Upload buffer to Cloudinary
+      const uploadResult = await new Promise<any>((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: 'aman-fashion/products' },
+          (error, result) => {
+            if (error || !result) {
+              reject(error || new Error('Cloudinary upload failed'));
+            } else {
+              resolve(result);
+            }
+          }
+        );
+        stream.end(req.file!.buffer);
+      });
+
+      const image = await prisma.productImage.create({
+        data: {
+          productId: id,
+          url: uploadResult.secure_url,
+        },
+      });
+
+      res.status(201).json(image);
+    } catch (error: any) {
+      console.error('Error uploading image to Cloudinary:', error);
+      res.status(500).json({ error: error.message || 'Internal server error' });
+    }
+  }
+);
 
 export default router;
