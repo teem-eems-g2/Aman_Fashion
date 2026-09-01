@@ -5,6 +5,8 @@ import authRouter from './routes/auth.routes';
 import adminAuthRouter from './routes/adminAuth.routes';
 import categoryRouter from './routes/category.routes';
 import adminCategoryRouter from './routes/adminCategory.routes';
+import productRouter from './routes/product.routes';
+import adminProductRouter from './routes/adminProduct.routes';
 
 dotenv.config();
 
@@ -22,6 +24,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/admin/auth', adminAuthRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/admin/categories', adminCategoryRouter);
+app.use('/api/products', productRouter);
+app.use('/api/admin/products', adminProductRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
