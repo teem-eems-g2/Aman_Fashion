@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import '../../features/splash/splash_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const PlaceholderScreen(),
+      builder: (context, state) => const SplashScreen(),
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const PlaceholderHomeScreen(),
     ),
   ],
 );
 
-class PlaceholderScreen extends StatelessWidget {
-  const PlaceholderScreen({super.key});
+class PlaceholderHomeScreen extends StatelessWidget {
+  const PlaceholderHomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
