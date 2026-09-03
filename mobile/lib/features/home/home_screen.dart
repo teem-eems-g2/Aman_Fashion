@@ -6,6 +6,16 @@ import '../../core/constants/app_colors.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  // Exact sampled hex constants from UI_design.png
+  static const Color scaffoldBg = Color(0xFFF7F1EA);
+  static const Color heroCardBg = Color(0xFF232F1F);
+  static const Color heroGoldBtn = Color(0xFFCBAF7E);
+  static const Color categoryCircleBg = Color(0xFFF7F1EA);
+  static const Color categoryBorderAndIcon = Color(0xFF181818);
+  static const Color bottomNavBg = Color(0xFF101110);
+  static const Color navActiveGold = Color(0xFFCBAF7E);
+  static const Color navInactiveWhite = Color(0xA6FFFFFF);
+
   final List<Map<String, dynamic>> _categories = const [
     {
       'name': 'T-Shirts',
@@ -32,7 +42,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.cream,
+      backgroundColor: scaffoldBg,
       body: SafeArea(
         bottom: false,
         child: Stack(
@@ -48,17 +58,17 @@ class HomeScreen extends StatelessWidget {
                   _buildTopBar(context),
                   const SizedBox(height: 18),
 
-                  // 2. Hero Section: TWO SEPARATE STACKED ELEMENTS (matching mockup)
+                  // 2. Hero Section: Two separate stacked cards (image on top, solid card below)
                   _buildHeroSection(context),
                   const SizedBox(height: 24),
 
-                  // 3. Categories Section: OUTLINED CIRCLES (matching mockup)
+                  // 3. Categories Section: Outlined circles with sampled colors
                   _buildCategoriesSection(context),
                 ],
               ),
             ),
 
-            // 4. Floating Pill Bottom Navigation Bar: BLACK, OUTLINED ICONS (matching mockup)
+            // 4. Floating Pill Bottom Navigation Bar with exact sampled colors & active highlight
             Positioned(
               left: 24,
               right: 24,
@@ -71,7 +81,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // 1. Top Bar with BLACK text
+  // 1. Top Bar with pure Black text
   Widget _buildTopBar(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -89,7 +99,7 @@ class HomeScreen extends StatelessWidget {
                     style: GoogleFonts.poppins(
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.black,
+                      color: categoryBorderAndIcon,
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -128,7 +138,7 @@ class HomeScreen extends StatelessWidget {
               ),
               child: const Icon(
                 Icons.search_rounded,
-                color: AppColors.black,
+                color: categoryBorderAndIcon,
                 size: 22,
               ),
             ),
@@ -144,7 +154,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
-          // 2a. Top element: Plain photo/image block (no text overlay)
+          // 2a. Top element: Plain photo image block
           Container(
             height: 240,
             width: double.infinity,
@@ -167,12 +177,12 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // 2b. Bottom element: Solid dark-green card (no image, text + button only)
+          // 2b. Bottom element: Solid dark-green card (sampled hex #232F1F)
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             decoration: BoxDecoration(
-              color: const Color(0xFF1A382C),
+              color: heroCardBg,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -190,11 +200,12 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Plain text: NO pill container or border background
                     Text(
                       'NEW COLLECTION',
                       style: GoogleFonts.poppins(
-                        color: AppColors.cream.withValues(alpha: 0.8),
-                        fontSize: 10,
+                        color: heroGoldBtn,
+                        fontSize: 11,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 1.5,
                       ),
@@ -224,7 +235,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                // Circular gold arrow button
+                // Circular gold arrow button (sampled hex #CBAF7E)
                 InkWell(
                   onTap: () => context.push('/categories'),
                   borderRadius: BorderRadius.circular(22),
@@ -232,13 +243,13 @@ class HomeScreen extends StatelessWidget {
                     width: 44,
                     height: 44,
                     decoration: const BoxDecoration(
-                      color: AppColors.gold,
+                      color: heroGoldBtn,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.arrow_forward_rounded,
                       size: 20,
-                      color: AppColors.black,
+                      color: categoryBorderAndIcon,
                     ),
                   ),
                 ),
@@ -250,7 +261,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // 3. Categories Section: OUTLINED circles, black borders, black text
+  // 3. Categories Section: Outlined circles (sampled bg #F7F1EA, border & glyph #181818)
   Widget _buildCategoriesSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +277,7 @@ class HomeScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.black,
+                  color: categoryBorderAndIcon,
                 ),
               ),
               InkWell(
@@ -302,10 +313,10 @@ class HomeScreen extends StatelessWidget {
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: AppColors.white,
+                        color: categoryCircleBg,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.black,
+                          color: categoryBorderAndIcon,
                           width: 1.5,
                         ),
                         boxShadow: [
@@ -319,7 +330,7 @@ class HomeScreen extends StatelessWidget {
                       child: Center(
                         child: Icon(
                           cat['icon'] as IconData,
-                          color: AppColors.black,
+                          color: categoryBorderAndIcon,
                           size: 24,
                         ),
                       ),
@@ -330,7 +341,7 @@ class HomeScreen extends StatelessWidget {
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: AppColors.black,
+                        color: categoryBorderAndIcon,
                       ),
                     ),
                   ],
@@ -343,12 +354,12 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // 4. Floating Pill Bottom Navigation Bar: Solid BLACK, uniform white outline icons
+  // 4. Floating Pill Bottom Navigation Bar: Solid BLACK (#101110), active Home highlighted (#CBAF7E) vs inactive (#FFFFFF @ 65%)
   Widget _buildFloatingBottomNav(BuildContext context) {
     return Container(
       height: 64,
       decoration: BoxDecoration(
-        color: AppColors.black,
+        color: bottomNavBg,
         borderRadius: BorderRadius.circular(36),
         boxShadow: [
           BoxShadow(
@@ -361,29 +372,34 @@ class HomeScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // 1. Home (Outline)
+          // 1. Home (Active highlighted tab in gold #CBAF7E)
           _buildNavItem(
-            icon: Icons.home_outlined,
+            icon: Icons.home_filled,
+            color: navActiveGold,
             onTap: () {},
           ),
-          // 2. Categories (Grid outline)
+          // 2. Categories (Grid outline in inactive light white #A6FFFFFF)
           _buildNavItem(
             icon: Icons.grid_view_outlined,
+            color: navInactiveWhite,
             onTap: () => context.push('/categories'),
           ),
-          // 3. Frame / Rounded Square outline (matching mockup tile 2)
+          // 3. Frame / Rounded Square outline
           _buildNavItem(
             icon: Icons.crop_square_rounded,
+            color: navInactiveWhite,
             onTap: () => context.push('/search'),
           ),
           // 4. Heart / Favorites outline
           _buildNavItem(
             icon: Icons.favorite_border_rounded,
+            color: navInactiveWhite,
             onTap: () {},
           ),
           // 5. Profile outline
           _buildNavItem(
             icon: Icons.person_outline_rounded,
+            color: navInactiveWhite,
             onTap: () => context.push('/profile'),
           ),
         ],
@@ -393,6 +409,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildNavItem({
     required IconData icon,
+    required Color color,
     required VoidCallback onTap,
   }) {
     return InkWell(
@@ -403,7 +420,7 @@ class HomeScreen extends StatelessWidget {
         child: Icon(
           icon,
           size: 22,
-          color: AppColors.white,
+          color: color,
         ),
       ),
     );
