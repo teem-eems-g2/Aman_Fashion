@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../core/constants/app_colors.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  // Exact sampled hex constants from UI_design.png
+  // Sampled palette constants matching UI_design.png exactly
   static const Color scaffoldBg = Color(0xFFF7F1EA);
-  static const Color heroCardBg = Color(0xFF232F1F);
-  static const Color heroGoldBtn = Color(0xFFCBAF7E);
-  static const Color categoryCircleBg = Color(0xFFF7F1EA);
-  static const Color categoryBorderAndIcon = Color(0xFF181818);
-  static const Color bottomNavBg = Color(0xFF101110);
-  static const Color navActiveGold = Color(0xFFCBAF7E);
-  static const Color navInactiveWhite = Color(0xA6FFFFFF);
+  static const Color heroCardBg = Color(0xFF1E3526);
+  static const Color goldAccent = Color(0xFFC7A870);
+  static const Color textDark = Color(0xFF181818);
+  static const Color textMuted = Color(0xFF757575);
+  static const Color navBg = Color(0xFF101110);
 
   final List<Map<String, dynamic>> _categories = const [
     {
       'name': 'T-Shirts',
-      'icon': Icons.checkroom_outlined,
+      'image': 'assets/images/cat_tshirt.png',
     },
     {
       'name': 'Shirts',
-      'icon': Icons.dry_cleaning_outlined,
+      'image': 'assets/images/cat_shirt.png',
     },
     {
       'name': 'Pants',
-      'icon': Icons.straighten_outlined,
+      'image': 'assets/images/cat_pants.png',
     },
     {
       'name': 'Jackets',
-      'icon': Icons.layers_outlined,
+      'image': 'assets/images/cat_jacket.png',
     },
     {
       'name': 'Hoodies',
-      'icon': Icons.accessibility_new_outlined,
+      'image': 'assets/images/cat_hoodie.png',
     },
   ];
 
@@ -43,231 +40,239 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBg,
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            // Home Content
-            SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 120),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12),
-                  // 1. Top Bar: Greeting + Search Icon (Black text)
-                  _buildTopBar(context),
-                  const SizedBox(height: 18),
-
-                  // 2. Hero Section: Two separate stacked cards (image on top, solid card below)
-                  _buildHeroSection(context),
-                  const SizedBox(height: 24),
-
-                  // 3. Categories Section: Outlined circles with sampled colors
-                  _buildCategoriesSection(context),
-                ],
-              ),
-            ),
-
-            // 4. Floating Pill Bottom Navigation Bar with exact sampled colors & active highlight
-            Positioned(
-              left: 24,
-              right: 24,
-              bottom: 24,
-              child: _buildFloatingBottomNav(context),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // 1. Top Bar with pure Black text
-  Widget _buildTopBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Hello, Style',
-                    style: GoogleFonts.poppins(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w700,
-                      color: categoryBorderAndIcon,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  const Text('👋', style: TextStyle(fontSize: 18)),
-                ],
-              ),
-              const SizedBox(height: 2),
-              Text(
-                'Find your perfect look',
-                style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.greyDark,
-                ),
-              ),
-            ],
-          ),
-          // Search Icon Button
-          InkWell(
-            onTap: () => context.push('/search'),
-            borderRadius: BorderRadius.circular(24),
-            child: Container(
-              width: 46,
-              height: 46,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.greyLight, width: 1.2),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withValues(alpha: 0.04),
-                    blurRadius: 10,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Icon(
-                Icons.search_rounded,
-                color: categoryBorderAndIcon,
-                size: 22,
-              ),
+          // Scrollable Home Content
+          SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 120),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 1. Top Section: Full-bleed Hero Model Photo with Greeting & Green Card
+                _buildHeroTopSection(context),
+                const SizedBox(height: 22),
+
+                // 2. Categories Section: Circular Product Thumbnails matching mockup
+                _buildCategoriesSection(context),
+              ],
             ),
+          ),
+
+          // 3. Floating Pill Bottom Navigation Bar matching mockup
+          Positioned(
+            left: 20,
+            right: 20,
+            bottom: 24,
+            child: _buildFloatingBottomNav(context),
           ),
         ],
       ),
     );
   }
 
-  // 2. Hero Section: Two separate stacked elements
-  Widget _buildHeroSection(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Column(
-        children: [
-          // 2a. Top element: Plain photo image block
-          Container(
-            height: 240,
-            width: double.infinity,
+  // 1. Full-bleed Hero Top Section: Model photo background with Greeting, Search & Green Card
+  Widget _buildHeroTopSection(BuildContext context) {
+    return Stack(
+      children: [
+        // Model Photo Background (covers entire top half down to green card)
+        SizedBox(
+          height: 490,
+          width: double.infinity,
+          child: Image.asset(
+            'assets/images/home_hero_bg.jpg',
+            fit: BoxFit.cover,
+            alignment: const Alignment(0.0, -0.45),
+          ),
+        ),
+
+        // Subtle gradient overlay at top for crystal-clear text readability
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 140,
+          child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withValues(alpha: 0.08),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Image.asset(
-              'assets/images/hero_model.jpg',
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              gradient: LinearGradient(
+                colors: [
+                  Colors.black.withValues(alpha: 0.45),
+                  Colors.transparent,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ),
-          const SizedBox(height: 12),
+        ),
 
-          // 2b. Bottom element: Solid dark-green card (sampled hex #232F1F)
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-            decoration: BoxDecoration(
-              color: heroCardBg,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.forestGreenDark.withValues(alpha: 0.2),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+        // Foreground: Top Bar + SUMMER VIBES Green Card
+        SafeArea(
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              // Top Bar: White Greeting text & Circular Search Button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Plain text: NO pill container or border background
-                    Text(
-                      'NEW COLLECTION',
-                      style: GoogleFonts.poppins(
-                        color: heroGoldBtn,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.5,
-                      ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Hello, Style',
+                              style: GoogleFonts.poppins(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            const Text('👋', style: TextStyle(fontSize: 18)),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Find your perfect look',
+                          style: GoogleFonts.poppins(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'SUMMER\nVIBES',
-                      style: GoogleFonts.poppins(
-                        color: AppColors.cream,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w800,
-                        height: 1.1,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    // Search Icon Button
                     InkWell(
-                      onTap: () => context.push('/categories'),
-                      child: Text(
-                        'Explore Now',
-                        style: GoogleFonts.poppins(
-                          color: AppColors.cream,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                      onTap: () => context.push('/search'),
+                      borderRadius: BorderRadius.circular(24),
+                      child: Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.search_rounded,
+                          color: textDark,
+                          size: 22,
                         ),
                       ),
                     ),
                   ],
                 ),
-                // Circular gold arrow button (sampled hex #CBAF7E)
-                InkWell(
-                  onTap: () => context.push('/categories'),
-                  borderRadius: BorderRadius.circular(22),
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: const BoxDecoration(
-                      color: heroGoldBtn,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.arrow_forward_rounded,
-                      size: 20,
-                      color: categoryBorderAndIcon,
-                    ),
+              ),
+
+              const SizedBox(height: 220),
+
+              // Solid Dark Green Card: "SUMMER VIBES"
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  decoration: BoxDecoration(
+                    color: heroCardBg,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.25),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'NEW COLLECTION',
+                            style: GoogleFonts.poppins(
+                              color: goldAccent,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 2.0,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'SUMMER\nVIBES',
+                            style: GoogleFonts.poppins(
+                              color: Colors.white,
+                              fontSize: 26,
+                              fontWeight: FontWeight.w800,
+                              height: 1.1,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          InkWell(
+                            onTap: () => context.push('/categories'),
+                            child: Text(
+                              'Explore Now',
+                              style: GoogleFonts.poppins(
+                                color: Colors.white.withValues(alpha: 0.9),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Circular gold arrow button
+                      InkWell(
+                        onTap: () => context.push('/categories'),
+                        borderRadius: BorderRadius.circular(24),
+                        child: Container(
+                          width: 48,
+                          height: 48,
+                          decoration: const BoxDecoration(
+                            color: goldAccent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 22,
+                            color: textDark,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  // 3. Categories Section: Outlined circles (sampled bg #F7F1EA, border & glyph #181818)
+  // 2. Categories Section: Circular Product Thumbnails matching mockup
   Widget _buildCategoriesSection(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -277,7 +282,7 @@ class HomeScreen extends StatelessWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: categoryBorderAndIcon,
+                  color: textDark,
                 ),
               ),
               InkWell(
@@ -287,21 +292,21 @@ class HomeScreen extends StatelessWidget {
                   style: GoogleFonts.poppins(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    color: AppColors.greyDark,
+                    color: textMuted,
                   ),
                 ),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         SizedBox(
-          height: 100,
+          height: 94,
           child: ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             scrollDirection: Axis.horizontal,
             itemCount: _categories.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 18),
+            separatorBuilder: (context, index) => const SizedBox(width: 16),
             itemBuilder: (context, index) {
               final cat = _categories[index];
               return InkWell(
@@ -310,38 +315,43 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                      width: 60,
-                      height: 60,
+                      width: 58,
+                      height: 58,
                       decoration: BoxDecoration(
-                        color: categoryCircleBg,
+                        color: const Color(0xFFEDE8E0),
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: categoryBorderAndIcon,
-                          width: 1.5,
-                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.black.withValues(alpha: 0.04),
+                            color: Colors.black.withValues(alpha: 0.06),
                             blurRadius: 6,
-                            offset: const Offset(0, 2),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
-                      child: Center(
-                        child: Icon(
-                          cat['icon'] as IconData,
-                          color: categoryBorderAndIcon,
-                          size: 24,
+                      child: ClipOval(
+                        child: Image.asset(
+                          cat['image'] as String,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: const Color(0xFF232323),
+                              child: const Icon(
+                                Icons.checkroom_outlined,
+                                color: Colors.white,
+                                size: 24,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 6),
                     Text(
                       cat['name'] as String,
                       style: GoogleFonts.poppins(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        color: categoryBorderAndIcon,
+                        color: textDark,
                       ),
                     ),
                   ],
@@ -354,52 +364,52 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // 4. Floating Pill Bottom Navigation Bar: Solid BLACK (#101110), active Home highlighted (#CBAF7E) vs inactive (#FFFFFF @ 65%)
+  // 3. Floating Pill Bottom Navigation Bar matching mockup
   Widget _buildFloatingBottomNav(BuildContext context) {
     return Container(
-      height: 64,
+      height: 62,
       decoration: BoxDecoration(
-        color: bottomNavBg,
+        color: navBg,
         borderRadius: BorderRadius.circular(36),
         boxShadow: [
           BoxShadow(
-            color: AppColors.black.withValues(alpha: 0.3),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: Colors.black.withValues(alpha: 0.35),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // 1. Home (Active highlighted tab in gold #CBAF7E)
+          // 1. Home (Active Gold)
           _buildNavItem(
             icon: Icons.home_filled,
-            color: navActiveGold,
+            color: goldAccent,
             onTap: () {},
           ),
-          // 2. Categories (Grid outline in inactive light white #A6FFFFFF)
+          // 2. Categories (Grid outline in White)
           _buildNavItem(
             icon: Icons.grid_view_outlined,
-            color: navInactiveWhite,
+            color: Colors.white.withValues(alpha: 0.9),
             onTap: () => context.push('/categories'),
           ),
-          // 3. Frame / Rounded Square outline
+          // 3. Frame / Rounded Box in White
           _buildNavItem(
             icon: Icons.crop_square_rounded,
-            color: navInactiveWhite,
+            color: Colors.white.withValues(alpha: 0.9),
             onTap: () => context.push('/search'),
           ),
-          // 4. Heart / Favorites outline
+          // 4. Heart in White
           _buildNavItem(
             icon: Icons.favorite_border_rounded,
-            color: navInactiveWhite,
+            color: Colors.white.withValues(alpha: 0.9),
             onTap: () {},
           ),
-          // 5. Profile outline
+          // 5. Profile in White
           _buildNavItem(
             icon: Icons.person_outline_rounded,
-            color: navInactiveWhite,
+            color: Colors.white.withValues(alpha: 0.9),
             onTap: () => context.push('/profile'),
           ),
         ],
